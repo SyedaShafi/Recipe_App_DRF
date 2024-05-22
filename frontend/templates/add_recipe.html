@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+ <section class="gradient-custom">
+      <div class="container py-5">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem">
+              <div class="card-body p-5 text-center">
+                <div class="mb-md-5 mt-md-4 pb-5">
+                  <h2 class="fw-bold mb-2 text-uppercase">Add Recipe</h2>
+
+                  <p class="text-white-50 mb-5">
+                  </p>
+                  <form id="recipeForm" enctype="multipart/form-data" onsubmit="addRecipe(event)">
+                    {% csrf_token %}
+                    
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                    <label class="form-label" for="recipe-title">Title</label>
+                    <input
+                      type="text"
+                      id="recipe-title"
+                      class="form-control form-control-lg"
+                    />
+
+                  </div>
+
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                    <label class="form-label" for="recipe-ingredients"
+                      >Ingredients</label
+                    >
+                    <input
+                      type="text"
+                      id="recipe-ingredients"
+                      class="form-control form-control-lg"
+                    />
+
+                  </div>
+
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                    <label class="form-label" for="recipe-instructions"
+                      >Instructions</label
+                    >
+                    <input
+                      type="text"
+                      id="recipe-instructions"
+                      class="form-control form-control-lg"
+                    />
+                    <span class="error-message text-danger" id="password-error"></span>
+
+                  </div>
+
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                    <label class="form-label" for="recipe-image"
+                       >Image</label
+                    >
+                    <input
+                      type="file"
+                      id="recipe-image"
+                      class="form-control form-control-lg"
+                      accept="image/*"
+                    />
+                    <span class="error-message text-danger" id="password-error"></span>
+
+                  </div>
+
+                  <button
+                    class="btn btn-outline-light btn-lg px-5"
+                    type="submit"
+                  >
+                    Submit
+                  </button>
+
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock  %}
+

@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block body %}
+<div class="">
+  <h3>Hello , <span id="username"></span></h3>
+
+  <h4>Bio: <span id="user-bio"></span></h4>
+</div>
+
+<h2 class="text-center">all the recipes</h2>
+
+<div id="user-recipe-cards" class="d-flex flex-wrap"></div>
+
+<div id="editRecipeModal" class="modal" >
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <form
+      id="editRecipeForm"
+      enctype="multipart/form-data"
+      onsubmit="submitEdit(event)"
+      style="width: 50%; margin: auto"
+    >
+      {% csrf_token %}
+      <input type="hidden" id="edit-recipe-id" />
+      <div class="form-outline form-white mb-4">
+        <label class="form-label" for="edit-recipe-title">Title</label>
+        <input
+          type="text"
+          id="edit-recipe-title"
+          class="form-control form-control-lg"
+        />
+      </div>
+      <div class="form-outline form-white mb-4">
+        <label class="form-label" for="edit-recipe-ingredients"
+          >Ingredients</label
+        >
+        <input
+          type="text"
+          id="edit-recipe-ingredients"
+          class="form-control form-control-lg"
+        />
+      </div>
+      <div class="form-outline form-white mb-4">
+        <label class="form-label" for="edit-recipe-instructions"
+          >Instructions</label
+        >
+        <input
+          type="text"
+          id="edit-recipe-instructions"
+          class="form-control form-control-lg"
+        />
+      </div>
+      <div class="form-outline form-white mb-4">
+        <label class="form-label" for="edit-recipe-image">Image</label>
+        <input
+          type="file"
+          id="edit-recipe-image"
+          class="form-control form-control-lg"
+          accept="image/*"
+        />
+      </div>
+      <button class="btn btn-primary btn-lg px-5 my-4" type="submit">Save</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
