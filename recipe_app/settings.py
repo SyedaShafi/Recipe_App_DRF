@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-u^fjv@zr1gak)gh(wmy%#-bzbg55t=ri!12k1p^@n!6gvfdduk
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-# CSRF_TRUSTED_ORIGINS = ['https://library-system-ea9m.onrender.com','https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://recipe-app-drf.onrender.com','https://*.127.0.0.1']
 
 # Application definition
 

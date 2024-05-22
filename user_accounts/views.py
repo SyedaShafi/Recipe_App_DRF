@@ -39,7 +39,7 @@ class RegistrationAPIView(APIView):
             user = serializer.save()
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            confirm_link = f"http://127.0.0.1:8000/user/active/{uid}/{token}/"
+            confirm_link = f"https://recipe-app-drf.onrender.com/user/active/{uid}/{token}/"
             email_subject = "Confirm Your Email"
             email_body = render_to_string('confirm_email.html', {'confirm_link' : confirm_link})
             email = EmailMultiAlternatives(email_subject , '', to=[user.email])

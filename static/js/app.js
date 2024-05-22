@@ -66,7 +66,7 @@ const handleRegistration = (event) => {
     email: email,
   };
 
-  fetch('http://127.0.0.1:8000/user/signup/', {
+  fetch('https://recipe-app-drf.onrender.com/user/signup/', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     'X-CSRFToken': getCookie('csrftoken'),
@@ -113,7 +113,7 @@ const handleLogin = (event) => {
   };
 
   if ((username, password)) {
-    fetch('http://127.0.0.1:8000/user/login/', {
+    fetch('https://recipe-app-drf.onrender.com/user/login/', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(info),
@@ -152,7 +152,7 @@ const handleLogin = (event) => {
 const handlelogOut = () => {
   var token = localStorage.getItem('token');
 
-  fetch('http://127.0.0.1:8000/user/logout/', {
+  fetch('https://recipe-app-drf.onrender.com/user/logout/', {
     method: 'POST',
     headers: {
       Authorization: `Token ${token}`,
@@ -160,13 +160,16 @@ const handlelogOut = () => {
       'X-CSRFToken': getCookie('csrftoken'),
     },
   })
-    .then((res) => res.json())
-    .then((data) => {
-      window.location.href = '/';
-      alert('User Logged Out');
-      localStorage.removeItem('token');
-      localStorage.removeItem('user_id');
-    });
+    .then((response) => {
+      if (response.ok) {
+        alert('User Logged Out');
+        localStorage.clear();
+        window.location.href = '/login/';
+      } else {
+        console.error('Logout failed');
+      }
+    })
+    .catch((error) => console.error('Error:', error));
 };
 
 function fetchProfileData() {
@@ -176,7 +179,7 @@ function fetchProfileData() {
     window.location.href = '/login';
     return;
   }
-  fetch(`http://127.0.0.1:8000/user/list/${userId}`, {
+  fetch(`https://recipe-app-drf.onrender.com/user/list/${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -198,7 +201,7 @@ function fetchProfileData() {
       console.error('Error fetching profile:', error);
     });
 
-  fetch(`http://127.0.0.1:8000/recipe/list?user_id= ${userId}`, {
+  fetch(`https://recipe-app-drf.onrender.com/recipe/list?user_id= ${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -263,7 +266,7 @@ const addRecipe = (event) => {
   formData.append('image', image);
   formData.append('user', userId);
 
-  fetch('http://127.0.0.1:8000/recipe/create/', {
+  fetch('https://recipe-app-drf.onrender.com/recipe/create/', {
     method: 'POST',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -298,7 +301,7 @@ const closeModal = () => {
 };
 
 const editRecipe = (id) => {
-  fetch(`http://127.0.0.1:8000/recipe/list/${id}`, {
+  fetch(`https://recipe-app-drf.onrender.com/recipe/list/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -339,7 +342,7 @@ const submitEdit = (event) => {
     formData.append('image', imageInput.files[0]);
   }
 
-  fetch(`http://127.0.0.1:8000/recipe/update/${id}/`, {
+  fetch(`https://recipe-app-drf.onrender.com/recipe/update/${id}/`, {
     method: 'PUT',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -367,7 +370,7 @@ const deleteRecipe = (id) => {
     return;
   }
 
-  fetch(`http://127.0.0.1:8000/recipe/delete/${id}/`, {
+  fetch(`https://recipe-app-drf.onrender.com/recipe/delete/${id}/`, {
     method: 'DELETE',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -386,7 +389,7 @@ const deleteRecipe = (id) => {
 };
 
 function fetchAllRecipes() {
-  fetch('http://127.0.0.1:8000/recipe/list/', {
+  fetch('https://recipe-app-drf.onrender.com/recipe/list/', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -437,7 +440,7 @@ function displayRecipes(recipes) {
 }
 
 function fetchRecipeDetails(id) {
-  fetch(`http://127.0.0.1:8000/recipe/list/${id}`)
+  fetch(`https://recipe-app-drf.onrender.com/recipe/list/${id}`)
     .then((response) => response.json())
     .then((data) => {
       displayRecipeDetails(data);
@@ -458,7 +461,9 @@ function displayRecipeDetails(recipe) {
     <p>${recipe.instructions}</p>
   `;
 
-  fetch(`http://127.0.0.1:8000/comment/list/?recipe_id=${recipe.id}`)
+  fetch(
+    `https://recipe-app-drf.onrender.com/comment/list/?recipe_id=${recipe.id}`
+  )
     .then((response) => response.json())
     .then((data) => {
       displayComments(data);
@@ -469,13 +474,16 @@ function displayRecipeDetails(recipe) {
 }
 
 function fetchUserDetails(user_id) {
-  const response = fetch(`http://127.0.0.1:8000/user/list/${user_id}/`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': getCookie('csrftoken'),
-    },
-  });
+  const response = fetch(
+    `https://recipe-app-drf.onrender.com/user/list/${user_id}/`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Network response was not ok');
@@ -533,7 +541,7 @@ function addComment(event) {
   const rating = document.getElementById('comment-rating').value;
   const user = localStorage.getItem('user_id');
 
-  fetch('http://127.0.0.1:8000/comment/create/', {
+  fetch('https://recipe-app-drf.onrender.com/comment/create/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -565,7 +573,7 @@ const closeCommentModal = () => {
 };
 
 const editComment = (id) => {
-  fetch(`http://127.0.0.1:8000/comment/list/${id}`, {
+  fetch(`https://recipe-app-drf.onrender.com/comment/list/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -590,8 +598,8 @@ const submitCommentEdit = (event) => {
   const title = document.getElementById('edit-comment-title').value;
   const rating = document.getElementById('edit-comment-rating').value;
   const user = localStorage.getItem('user_id');
-  console.log(recipe_id)
-  fetch(`http://127.0.0.1:8000/comment/update/${id}/`, {
+  console.log(recipe_id);
+  fetch(`https://recipe-app-drf.onrender.com/comment/update/${id}/`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -625,7 +633,7 @@ const deleteComment = (id) => {
     return;
   }
 
-  fetch(`http://127.0.0.1:8000/comment/delete/${id}/`, {
+  fetch(`https://recipe-app-drf.onrender.com/comment/delete/${id}/`, {
     method: 'DELETE',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
