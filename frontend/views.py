@@ -4,6 +4,11 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'index.html')
 
+def allRecipe(request):
+    return render(request, 'all_recipe.html')
+
+def contactUs(request):
+    return render(request, 'contact_us.html')
 
 def user_signup(request):
     return render(request, 'signup.html')

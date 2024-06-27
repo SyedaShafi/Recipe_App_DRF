@@ -1,49 +1,68 @@
-{% extends "base.html" %} {% block body %}
-<div id="recipe-detail-container" class="container"></div>
+{% extends "base.html" %} {% load static %} {% block body %}
+<div
+  id="recipe-detail-container"
+  class="container w-100 mx-auto pt-5 row"
+></div>
 
 <!-- Edit Comment Modal -->
 <div id="editCommentModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeCommentModal()">&times;</span>
-    <form
-      id="editCommentForm"
-      onsubmit="submitCommentEdit(event)"
-      style="width: 50%; margin: auto"
-    >
-      {% csrf_token %}
-      <input type="hidden" id="edit-comment-id" />
-      <input type="hidden" id="edit-recipe-id" />
-      <div class="form-outline form-white mb-4">
-        <label class="form-label" for="edit-comment-title">Body</label>
-        <input
-          type="text"
-          id="edit-comment-title"
-          class="form-control form-control-lg"
-        />
-      </div>
-      <div class="form-outline form-white mb-4">
-        <label class="form-label" for="edit-comment-rating">Rating</label>
-        <select class="form-control" id="edit-comment-rating" required>
-          <option value="⭐">⭐</option>
-          <option value="⭐⭐">⭐⭐</option>
-          <option value="⭐⭐⭐">⭐⭐⭐</option>
-          <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
-          <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
-        </select>
-      </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+       <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          onclick="closeCommentModal()"
+        ></button>
+      <form
+        id="editCommentForm"
+        class="pb-4"
+        onsubmit="submitCommentEdit(event)"
+        style="width: 50%; margin: auto"
+      >
+        {% csrf_token %}
+        <input type="hidden" id="edit-comment-id" />
+        <input type="hidden" id="edit-recipe-id" />
+        <div class="form-outline form-white mb-4">
+          <label class="form-label" for="edit-comment-title">Comment</label>
+          <textarea
+            id="edit-comment-title"
+            class="form-control form-control-lg"
+            row="3"
+          ></textarea>
+        </div>
+        <div class="form-outline form-white mb-4">
+          <label class="form-label" for="edit-comment-rating">Rating</label>
+          <select class="form-control" id="edit-comment-rating" required>
+            <option value="⭐">⭐</option>
+            <option value="⭐⭐">⭐⭐</option>
+            <option value="⭐⭐⭐">⭐⭐⭐</option>
+            <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+            <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
+          </select>
+        </div>
+         <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            onclick="closeCommentModal()"
+          >
+            Close
+          </button>
 
-      <button class="btn btn-primary btn-lg px-5 my-4" type="submit">
-        Save
-      </button>
-    </form>
+       <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
   </div>
 </div>
 
 <div id="comments-section" class="mt-5">
-  <h2 class="text-center">All Comments</h2>
+  <hr />
   <div id="comments-container" class="m-4 d-flex flex-wrap"></div>
-
-  {% if user.is_authenticated %}
+  <div>
+    <div id="no-comment" class="pb-5 mb-5 w-100"></div>
+  </div>
 
   <form
     id="comment-form"
@@ -74,12 +93,6 @@
 
     <button type="submit" class="btn btn-primary my-4">Add Comment</button>
   </form>
-
-  {% else %}
-
-  <h3 class="text-center">
-    Please Login to add a comment <a href="{% url "user_login" %}">login</a>
-  </h3>
-  {% endif %}
 </div>
-{% endblock %}
+
+{% include "footer.html" %} {% endblock %}

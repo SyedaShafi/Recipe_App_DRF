@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import environ
-import dj_database_url
 env = environ.Env()
 environ.Env.read_env()
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'recipes',
     'user_accounts',
     'frontend',
+    'contact',
 ]
 
 # adding custom user model 
@@ -91,12 +92,12 @@ WSGI_APPLICATION = 'recipe_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -110,13 +111,13 @@ WSGI_APPLICATION = 'recipe_app.wsgi.application'
 # }
 
 
-DATABASES = {
-    'default': dj_database_url.config(
+# DATABASES = {
+#     'default': dj_database_url.config(
 
-       # Replace this value with your local database's connection string.
-       default='postgres://recipe_app_xm0n_user:ylMw59OYfD3go2Gz8Y9Lig3Cnl7AMeoA@dpg-cp70euqcn0vc73a2bq50-a.oregon-postgres.render.com/recipe_app_xm0n',
-     )
-}
+#        # Replace this value with your local database's connection string.
+#        default='postgres://recipe_app_xm0n_user:ylMw59OYfD3go2Gz8Y9Lig3Cnl7AMeoA@dpg-cp70euqcn0vc73a2bq50-a.oregon-postgres.render.com/recipe_app_xm0n',
+#      )
+# }
 
 
 

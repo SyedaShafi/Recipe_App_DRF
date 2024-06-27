@@ -23,6 +23,7 @@ urlpatterns = [
     path('user/', include('user_accounts.urls')),
     path('recipe/', include('recipes.urls')),
     path('comment/', include('comments.urls')),
+    path('contact/', include('contact.urls')),
     path('', include('frontend.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL,

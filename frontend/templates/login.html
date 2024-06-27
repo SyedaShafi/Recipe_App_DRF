@@ -1,9 +1,9 @@
 {% extends "base.html" %} 
 {% block body %}
 
-      <section class="gradient-custom">
+    <section class="gradient-custom pt-5">
       <div class="container py-5">
-        <div class="row d-flex justify-content-center align-items-center">
+        <div class="row d-flex justify-content-center align-items-center pt-5">
           <div class="col-12 col-md-8 col-lg-6 col-xl-5">
             <div class="card bg-dark text-white" style="border-radius: 1rem">
               <div class="card-body p-5 text-center">
@@ -14,7 +14,7 @@
                   <p class="text-white-50 mb-5">
                     Please enter your username and password!
                   </p>
-                  <form id="loginForm" onsubmit="handleLogin(event)">
+               <form id="loginForm" onsubmit="handleLogin(event)">
                     {% csrf_token %}
                     
                   <div data-mdb-input-init class="form-outline form-white mb-4">
@@ -58,13 +58,15 @@
                     >
                   </p>
                 </div>
-                  </form>
-
-
+              </form>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    {% include "footer.html" %}
+
 {% endblock  %}
+
+

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   fetchAllRecipes();
+  allComments();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -150,6 +151,9 @@ const handleLogin = (event) => {
 };
 
 const handlelogOut = () => {
+  if (!confirm('Are you sure you want to logout?')) {
+    return;
+  }
   var token = localStorage.getItem('token');
 
   fetch('https://recipe-app-drf.onrender.com/user/logout/', {
@@ -220,21 +224,29 @@ function fetchProfileData() {
       parent.innerHTML = '';
       data.forEach((d) => {
         const child = `
-          <div class="card m-3" style="width: 18rem" data-recipe-id="${d.id}">
-              <img src="${d.image}" class="card-img-top" alt="..." />
-              <div class="card-body">
-              <h5 class="card-title">${d.title}</h5>
-              <p class="card-text">
-                 ${d.instructions}
-              </p>
-              <p class="card-text">
-                 ${d.ingredients}
-              </p>
+        <div class="col-md-6">
+         <div class="card mx-2"    data-recipe-id="${d.id}">
+              <img src="${d.image}" class="w-100 card-img-top" alt="..." style="height:400px;" />
 
-              <a href="#" class="btn btn-primary" onclick="editRecipe(${d.id})">Edit</a>
-              <a href="#" class="btn btn-danger" onclick="deleteRecipe(${d.id})">Delete</a>
+              <div class="card-body">
+                <h5 class="card-title">${d.title}</h5>
+                <p class="card-text">
+                  <strong>Instructions: </strong> ${d.instructions}
+                </p>
+                <p class="card-text">
+                  <strong>Ingredients: </strong> ${d.ingredients}
+                </p>
               </div>
+
+              <div class="flex align-items-end pb-3 ps-4">
+                <a href="#" class="btn btn-primary" onclick="editRecipe(${d.id})">Edit</a>
+                <a href="#" class="btn btn-danger" onclick="deleteRecipe(${d.id})">Delete</a>
+              
+              </div>
+
           </div>
+        </div>
+         
         `;
         parent.innerHTML += child;
       });
@@ -282,7 +294,6 @@ const addRecipe = (event) => {
     })
     .then((data) => {
       // console.log(data);
-      alert('Recipe added Successfully');
       var element = document.getElementById('recipeForm');
       element.reset();
       window.location.href = '/profile';
@@ -359,7 +370,6 @@ const submitEdit = (event) => {
       return response.json();
     })
     .then((data) => {
-      alert('Recipe Updated');
       closeModal();
     })
     .catch((error) => console.error('Error updating recipe:', error));
@@ -425,9 +435,9 @@ function displayRecipes(recipes) {
     const truncatedInstructions = truncateText(recipe.instructions, 10);
     const truncatedIngredients = truncateText(recipe.ingredients, 10);
     const card = `
-      <div class="card m-3" style="width: 18rem">
-        <img src="${recipe.image}" class="card-img-top" alt="${recipe.title}" />
-        <div class="card-body">
+      <div class="card m-2" style="width: 464px">
+        <img src="${recipe.image}" class="card-img-top" alt="${recipe.title}" style="object-fit: cover; height: 300px; width:100%;">
+        <div class="card-body" >
           <h5 class="card-title">${recipe.title}</h5>
           <p class="card-text"> <strong> Ingredients:</strong>  ${truncatedIngredients}</p>
           <p class="card-text"><strong> Instructions: </strong>  ${truncatedInstructions}</p>
@@ -453,12 +463,19 @@ function fetchRecipeDetails(id) {
 function displayRecipeDetails(recipe) {
   const container = document.getElementById('recipe-detail-container');
   container.innerHTML = `
+
+  <div class="col-md-6 mt-5">
     <h1>${recipe.title}</h1>
-    <img src="${recipe.image}" alt="${recipe.title}">
     <h3>Ingredients</h3>
     <p>${recipe.ingredients}</p>
     <h3>Instructions</h3>
     <p>${recipe.instructions}</p>
+  </div>
+
+  <div class="w-100 col-md-6">
+    <img src="${recipe.image}" class="image-resize mx-auto mt-5" alt="${recipe.title}">
+  </div>
+  
   `;
 
   fetch(
@@ -473,8 +490,8 @@ function displayRecipeDetails(recipe) {
     });
 }
 
-function fetchUserDetails(user_id) {
-  const response = fetch(
+async function fetchUserDetails(user_id) {
+  const response = await fetch(
     `https://recipe-app-drf.onrender.com/user/list/${user_id}/`,
     {
       method: 'GET',
@@ -492,46 +509,131 @@ function fetchUserDetails(user_id) {
   return response.json();
 }
 
-function displayComments(comments) {
+async function recipeDetails(recipe_id) {
+  const response = await fetch(
+    `https://recipe-app-drf.onrender.com/recipe/list/${recipe_id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+}
+
+async function allComments() {
+  try {
+    const res = await fetch(
+      'https://recipe-app-drf.onrender.com/comment/list/',
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error('Network response was not okay!');
+    }
+
+    const data = await res.json();
+    const parent = document.getElementById('all-comment-container');
+
+    for (const comment of data) {
+      try {
+        const userDetails = await fetchUserDetails(comment.user);
+        const recipeDetail = await recipeDetails(comment.recipe);
+        const commentHTML = `
+          <div class="slide-visible mx-2">
+            <div>
+              <h6> Recipe Title : ${recipeDetail.title}</h6>
+              <h3 class="mb-0 h6" style="color:#DF1E1E;">${
+                userDetails.username
+              } <small class="text-muted text-uppercase inline ps-2">${new Date(
+          comment.creation_date
+        ).toLocaleDateString()}</small></h3> 
+              <div class="pt-3">
+                <p class="p-0 m-0">${comment.body}</p>
+                <small class="p-0 m-0">${comment.rating}</small>
+              </div>
+              
+            </div>
+          </div>
+        `;
+        parent.innerHTML += commentHTML;
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    }
+    // console.log(data);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+  }
+}
+
+async function displayComments(comments) {
+  if (comments.length == 0) {
+    const parent = document.getElementById('no-comment');
+    parent.innerHTML += `
+      <div class="text-center py-4">
+        <img src="/static/images/no-comment.png" alt="" style="width:100px; height:100px; ">
+      </div>
+      <div class="text-center mb-5">
+        <strong>No comments available. Be the first to comment.</strong>
+      </div>
+    `;
+    return;
+  }
+
   const container = document.getElementById('comments-container');
   container.innerHTML = '';
+
   const userId = localStorage.getItem('user_id');
-  comments.forEach((comment) => {
-    let userDetails;
+
+  // Iterate over each comment to fetch and display user details
+  for (const comment of comments) {
     try {
-      userDetails = fetchUserDetails(parseInt(comment.user));
+      const userDetails = await fetchUserDetails(comment.user);
+      const isCurrentUser = comment.user == userId;
+
+      // console.log(userDetails.username);
+
+      const commentElement = document.createElement('div');
+      commentElement.className = 'card m-3 border-dark';
+      commentElement.innerHTML = `
+        <div class="card-body m-2">
+          <h5 class="card-title">${userDetails.username}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${comment.rating}</h6>
+          <p class="card-text">${comment.body}</p>
+          <small class="text-muted">Posted on ${new Date(
+            comment.creation_date
+          ).toLocaleDateString()}</small>
+
+          <div class="mt-3">
+            ${
+              isCurrentUser
+                ? `
+                  <a href="#" class="btn btn-primary" onclick="editComment(${comment.id})">Edit</a>
+                  <a href="#" class="btn btn-danger" onclick="deleteComment(${comment.id})">Delete</a>
+                `
+                : ''
+            }
+          </div>
+        </div>
+      `;
+      container.appendChild(commentElement);
     } catch (error) {
       console.error('Error fetching user details:', error);
-      userDetails = { username: 'Unknown' }; // Default to 'Unknown' username if there's an error
     }
-    const username = userDetails.username;
-
-    const isCurrentUser = comment.user == userId;
-    const commentElement = document.createElement('div');
-    commentElement.className = 'card m-3 border-dark';
-    commentElement.innerHTML = `
-  <div class="card-body m-2">
-        <h5 class="card-title">${comment.user}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">${comment.rating}</h6>
-        <p class="card-text">${comment.body}</p>
-        <small class="text-muted">Posted on ${new Date(
-          comment.creation_date
-        ).toLocaleDateString()}</small>
-
-        
-        <div class="mt-3">
-        ${
-          isCurrentUser
-            ? `
-              <a href="#" class="btn btn-primary" onclick="editComment(${comment.id})">Edit</a>
-              <a href="#" class="btn btn-danger" onclick="deleteComment(${comment.id})">Delete</a>              `
-            : ''
-        }
-        </div>
-
-      </div>    `;
-    container.appendChild(commentElement);
-  });
+  }
 }
 
 function addComment(event) {
@@ -541,27 +643,32 @@ function addComment(event) {
   const rating = document.getElementById('comment-rating').value;
   const user = localStorage.getItem('user_id');
 
-  fetch('https://recipe-app-drf.onrender.com/comment/create/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': getCookie('csrftoken'),
-    },
-    body: JSON.stringify({
-      body: body,
-      rating: rating,
-      user: user,
-      recipe: recipeId,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      alert('Comment Added');
-      fetchRecipeDetails(recipeId); // Refresh comments
+  if (user) {
+    fetch('https://recipe-app-drf.onrender.com/comment/create/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify({
+        body: body,
+        rating: rating,
+        user: user,
+        recipe: recipeId,
+      }),
     })
-    .catch((error) => {
-      console.error('Error adding comment:', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        alert('Comment Added');
+        fetchRecipeDetails(recipeId); // Refresh comments
+      })
+      .catch((error) => {
+        console.error('Error adding comment:', error);
+      });
+  } else {
+    alert('Please Login to add a comment!');
+    window.location.href = '/login';
+  }
 }
 
 const openCommentModal = () => {
@@ -622,7 +729,6 @@ const submitCommentEdit = (event) => {
       return response.json();
     })
     .then((data) => {
-      alert('Comment Updated');
       closeCommentModal();
     })
     .catch((error) => console.error('Error updating comment:', error));
@@ -649,4 +755,38 @@ const deleteComment = (id) => {
       location.reload();
     })
     .catch((error) => console.error('Error deleting comment:', error));
+};
+
+const handleContactInfo = (event) => {
+  event.preventDefault();
+  user_email = document.getElementById('contact-user-email').value;
+  user_msg = document.getElementById('contact-concern').value;
+  const info = {
+    email: user_email,
+    message: user_msg,
+  };
+  console.log(info);
+  fetch('https://recipe-app-drf.onrender.com/contact/create/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    body: JSON.stringify(info),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        alert('Something Went Wrong!');
+      } else {
+        return res.json();
+      }
+    })
+    .then((data) => {
+      const form = document.getElementById('contactForm');
+      form.reset();
+      const success_msg = document.getElementById('contact-form-success');
+      success_msg.textContent =
+        "Thanks for your concern. We'll email you soon!";
+      console.log(data);
+    });
 };

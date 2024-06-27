@@ -1,4 +1,47 @@
-{% include "base.html" %} {% block body %}
-<h1 class="text-center">All Recipes</h1>
-<div id="all-recipe-cards-container" class="d-flex flex-wrap"></div>
+{% include "base.html" %} 
+{% block body %}
+{% comment %} hero section {% endcomment %}
+<div class="container-fluid hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 hero-content mt-4">
+                <h1 class="">Welcome to RecipeRealm</h1>
+                <p class="lead">A recipe sharing platform for those who love to cook!</p>
+                <p class='fs-5'>Show the World Your Amazing Recipes</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url "all_recipe" %}" class="btn btn-lg" style="background-color:#E2B336;">Explore Recipes</a>
+                {% else %}
+                    <a href="{% url "user_signup" %}" class="btn btn-lg" style="background-color:#E2B336;">Signup Now</a>
+                {% endif %}
+                </div>
+        </div>
+    </div>
+</div>
+
+<div class='px-4 my-5'>
+    <h1 class="text-center mt-5 recipe-slider-heading ">Recipe Appreciation's</h1>
+    <hr>
+</div>
+
+
+<div class="swiffy-slider slider-item-show3 slider-nav-dark slider-nav-visible slider-nav-outside slider-item-snapstart my-5 slider-nav-sm my-xl-5 slider-indicators-square slider-indicators-outside slider-indicators-dark slider-nav-animation-slideup slider-nav-animation slider-item-last-visible slider-height">
+    <div class="slider-container mx-5" id="all-comment-container">
+       
+    </div>
+
+    <button type="button" class="slider-nav" aria-label="Go left"></button>
+    <button type="button" class="slider-nav slider-nav-next" aria-label="Go left"></button>
+
+    <div class="slider-indicators" style="justify-content:right;margin-left: 3rem;">
+        <button class="" aria-label="Go to slide"></button>
+        <button aria-label="Go to slide" class=""></button>
+        <button aria-label="Go to slide" class=""></button>
+        <button aria-label="Go to slide" class="active"></button>
+    </div>
+
+</div>
+
+{% include "footer.html" %}
+
 {% endblock %}
+

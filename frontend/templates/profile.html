@@ -1,65 +1,95 @@
 {% extends "base.html" %} {% block body %}
-<div class="">
-  <h3>Hello , <span id="username"></span></h3>
+<div class="container pt-5">
+  <div class="row pt-5 mt-5">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title text-center mb-4">
+            Hello, <span id="username"></span>
+          </h3>
+          <h4 class="card-subtitle text-center mb-4">
+            Bio: <span id="user-bio"></span>
+          </h4>
 
-  <h4>Bio: <span id="user-bio"></span></h4>
-</div>
+          <h2 class="text-center mt-5 mb-4">Recipe List</h2>
 
-<h2 class="text-center">all the recipes</h2>
-
-<div id="user-recipe-cards" class="d-flex flex-wrap"></div>
-
-<div id="editRecipeModal" class="modal" >
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <form
-      id="editRecipeForm"
-      enctype="multipart/form-data"
-      onsubmit="submitEdit(event)"
-      style="width: 50%; margin: auto"
-    >
-      {% csrf_token %}
-      <input type="hidden" id="edit-recipe-id" />
-      <div class="form-outline form-white mb-4">
-        <label class="form-label" for="edit-recipe-title">Title</label>
-        <input
-          type="text"
-          id="edit-recipe-title"
-          class="form-control form-control-lg"
-        />
+          <div id="user-recipe-cards" class="row g-3 mx-md-5"></div>
+        </div>
       </div>
-      <div class="form-outline form-white mb-4">
-        <label class="form-label" for="edit-recipe-ingredients"
-          >Ingredients</label
-        >
-        <input
-          type="text"
-          id="edit-recipe-ingredients"
-          class="form-control form-control-lg"
-        />
-      </div>
-      <div class="form-outline form-white mb-4">
-        <label class="form-label" for="edit-recipe-instructions"
-          >Instructions</label
-        >
-        <input
-          type="text"
-          id="edit-recipe-instructions"
-          class="form-control form-control-lg"
-        />
-      </div>
-      <div class="form-outline form-white mb-4">
-        <label class="form-label" for="edit-recipe-image">Image</label>
-        <input
-          type="file"
-          id="edit-recipe-image"
-          class="form-control form-control-lg"
-          accept="image/*"
-        />
-      </div>
-      <button class="btn btn-primary btn-lg px-5 my-4" type="submit">Save</button>
-    </form>
+    </div>
   </div>
 </div>
 
-{% endblock %}
+<!-- Edit Recipe Modal -->
+<div id="editRecipeModal" class="modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Recipe</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          onclick="closeModal()"
+        ></button>
+      </div>
+      <form
+        id="editRecipeForm"
+        enctype="multipart/form-data"
+        onsubmit="submitEdit(event)"
+      >
+        {% csrf_token %}
+        <input type="hidden" id="edit-recipe-id" />
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="edit-recipe-title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="edit-recipe-title" />
+          </div>
+          <div class="mb-3">
+            <label for="edit-recipe-ingredients" class="form-label"
+              >Ingredients</label
+            >
+            <textarea
+              class="form-control"
+              id="edit-recipe-ingredients"
+              row="3"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="edit-recipe-instructions" class="form-label"
+              >Instructions</label
+            >
+            <textarea
+              class="form-control"
+              id="edit-recipe-instructions"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="edit-recipe-image" class="form-label">Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="edit-recipe-image"
+              accept="image/*"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            onclick="closeModal()"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %} {% endblock %}

@@ -2,10 +2,12 @@
 
 {% block body %}
 
- <section class="gradient-custom">
+
+
+ <section class="gradient-custom pt-5">
       <div class="container py-5">
-        <div class="row d-flex justify-content-center align-items-center">
-          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="row d-flex justify-content-center align-items-center pt-5">
+          <div class="col-12 col-md-10 col-lg-8">
             <div class="card bg-dark text-white" style="border-radius: 1rem">
               <div class="card-body p-5 text-center">
                 <div class="mb-md-5 mt-md-4 pb-5">
@@ -30,11 +32,11 @@
                     <label class="form-label" for="recipe-ingredients"
                       >Ingredients</label
                     >
-                    <input
-                      type="text"
+                    <textarea
                       id="recipe-ingredients"
                       class="form-control form-control-lg"
-                    />
+                      row="3"
+                    ></textarea>
 
                   </div>
 
@@ -42,11 +44,11 @@
                     <label class="form-label" for="recipe-instructions"
                       >Instructions</label
                     >
-                    <input
-                      type="text"
+                    <textarea
                       id="recipe-instructions"
                       class="form-control form-control-lg"
-                    />
+                      row="3"
+                    ></textarea>
                     <span class="error-message text-danger" id="password-error"></span>
 
                   </div>
@@ -81,5 +83,8 @@
       </div>
     </section>
 
+{% include "footer.html" %}
+
+    
 {% endblock  %}
 
