@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchAllRecipes();
 });
 
- document.addEventListener('DOMContentLoaded', function () {
-   swiffyslider.init();
- });
+document.addEventListener('DOMContentLoaded', function () {
+  swiffyslider.init();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   allComments();
@@ -232,7 +232,7 @@ function fetchProfileData() {
       data.forEach((d) => {
         const child = `
         <div class="col-md-6">
-         <div class="card mx-2"    data-recipe-id="${d.id}">
+         <div class="card mx-2 h-100"    data-recipe-id="${d.id}">
               <img src="${d.image}" class="w-100 card-img-top" alt="..." style="height:400px;" />
 
               <div class="card-body">
@@ -442,14 +442,20 @@ function displayRecipes(recipes) {
     const truncatedInstructions = truncateText(recipe.instructions, 10);
     const truncatedIngredients = truncateText(recipe.ingredients, 10);
     const card = `
-    <div class="col-md-6>
-       <div class="card m-2 border border-black">
+    <div class="col-md-6 " >
+       <div class="card m-2 border border-black h-100">
         <img src="${recipe.image}" class="card-img-top" alt="${recipe.title}" style="object-fit: cover; height: 300px; width:100%;">
+
         <div class="card-body" >
-          <h5 class="card-title">${recipe.title}</h5>
-          <p class="card-text"> <strong> Ingredients:</strong>  ${truncatedIngredients}</p>
-          <p class="card-text"><strong> Instructions: </strong>  ${truncatedInstructions}</p>
-          <a href="/recipe_details?id=${recipe.id}" class="btn btn-primary">Details</a>
+      
+            <h5 class="card-title">${recipe.title}</h5>
+            <p class="card-text"> <strong> Ingredients:</strong>  ${truncatedIngredients}</p>
+            <p class="card-text"><strong> Instructions: </strong>  ${truncatedInstructions}</p>
+  
+         
+            <a href="/recipe_details?id=${recipe.id}" class="btn btn-primary">Details</a>
+        
+
         </div>
       </div>
     </div>
