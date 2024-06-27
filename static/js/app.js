@@ -1,3 +1,5 @@
+const API = 'https://recipe-app-drf.onrender.com/';
+
 document.addEventListener('DOMContentLoaded', () => {
   fetchAllRecipes();
 });
@@ -74,7 +76,7 @@ const handleRegistration = (event) => {
     email: email,
   };
 
-  fetch('http://127.0.0.1:8000/user/signup/', {
+  fetch(`${API}/user/signup/`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     'X-CSRFToken': getCookie('csrftoken'),
@@ -121,7 +123,7 @@ const handleLogin = (event) => {
   };
 
   if ((username, password)) {
-    fetch('http://127.0.0.1:8000/user/login/', {
+    fetch(`${API}/user/login/`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(info),
@@ -163,7 +165,7 @@ const handlelogOut = () => {
   }
   var token = localStorage.getItem('token');
 
-  fetch('http://127.0.0.1:8000/user/logout/', {
+  fetch(`${API}/user/logout/`, {
     method: 'POST',
     headers: {
       Authorization: `Token ${token}`,
@@ -190,7 +192,7 @@ function fetchProfileData() {
     window.location.href = '/login';
     return;
   }
-  fetch(`http://127.0.0.1:8000/user/list/${userId}`, {
+  fetch(`${API}/user/list/${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -212,7 +214,7 @@ function fetchProfileData() {
       console.error('Error fetching profile:', error);
     });
 
-  fetch(`http://127.0.0.1:8000/recipe/list?user_id= ${userId}`, {
+  fetch(`${API}/recipe/list?user_id= ${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -285,7 +287,7 @@ const addRecipe = (event) => {
   formData.append('image', image);
   formData.append('user', userId);
 
-  fetch('http://127.0.0.1:8000/recipe/create/', {
+  fetch(`${API}/recipe/create/`, {
     method: 'POST',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -319,7 +321,7 @@ const closeModal = () => {
 };
 
 const editRecipe = (id) => {
-  fetch(`http://127.0.0.1:8000/recipe/list/${id}`, {
+  fetch(`${API}/recipe/list/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -360,7 +362,7 @@ const submitEdit = (event) => {
     formData.append('image', imageInput.files[0]);
   }
 
-  fetch(`http://127.0.0.1:8000/recipe/update/${id}/`, {
+  fetch(`${API}/recipe/update/${id}/`, {
     method: 'PUT',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -387,7 +389,7 @@ const deleteRecipe = (id) => {
     return;
   }
 
-  fetch(`http://127.0.0.1:8000/recipe/delete/${id}/`, {
+  fetch(`${API}/recipe/delete/${id}/`, {
     method: 'DELETE',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -406,7 +408,7 @@ const deleteRecipe = (id) => {
 };
 
 function fetchAllRecipes() {
-  fetch('http://127.0.0.1:8000/recipe/list/', {
+  fetch(`${API}/recipe/list/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -447,15 +449,10 @@ function displayRecipes(recipes) {
         <img src="${recipe.image}" class="card-img-top" alt="${recipe.title}" style="object-fit: cover; height: 300px; width:100%;">
 
         <div class="card-body" >
-      
             <h5 class="card-title">${recipe.title}</h5>
             <p class="card-text"> <strong> Ingredients:</strong>  ${truncatedIngredients}</p>
             <p class="card-text"><strong> Instructions: </strong>  ${truncatedInstructions}</p>
-  
-         
             <a href="/recipe_details?id=${recipe.id}" class="btn btn-primary">Details</a>
-        
-
         </div>
       </div>
     </div>
@@ -466,7 +463,7 @@ function displayRecipes(recipes) {
 }
 
 function fetchRecipeDetails(id) {
-  fetch(`http://127.0.0.1:8000/recipe/list/${id}`)
+  fetch(`${API}/recipe/list/${id}`)
     .then((response) => response.json())
     .then((data) => {
       displayRecipeDetails(data);
@@ -496,7 +493,7 @@ function displayRecipeDetails(recipe) {
   
   `;
 
-  fetch(`http://127.0.0.1:8000/comment/list/?recipe_id=${recipe.id}`)
+  fetch(`${API}/comment/list/?recipe_id=${recipe.id}`)
     .then((response) => response.json())
     .then((data) => {
       displayComments(data);
@@ -507,7 +504,7 @@ function displayRecipeDetails(recipe) {
 }
 
 async function fetchUserDetails(user_id) {
-  const response = await fetch(`http://127.0.0.1:8000/user/list/${user_id}/`, {
+  const response = await fetch(`${API}/user/list/${user_id}/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -523,16 +520,13 @@ async function fetchUserDetails(user_id) {
 }
 
 async function recipeDetails(recipe_id) {
-  const response = await fetch(
-    `http://127.0.0.1:8000/recipe/list/${recipe_id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCookie('csrftoken'),
-      },
-    }
-  );
+  const response = await fetch(`${API}/recipe/list/${recipe_id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+  });
 
   if (!response.ok) {
     throw new Error('Network response was not ok');
@@ -542,7 +536,7 @@ async function recipeDetails(recipe_id) {
 
 async function allComments() {
   try {
-    const res = await fetch('http://127.0.0.1:8000/comment/list/', {
+    const res = await fetch(`${API}/comment/list/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -608,7 +602,6 @@ async function displayComments(comments) {
 
   const userId = localStorage.getItem('user_id');
 
-  // Iterate over each comment to fetch and display user details
   for (const comment of comments) {
     try {
       const userDetails = await fetchUserDetails(comment.user);
@@ -654,7 +647,7 @@ function addComment(event) {
   const user = localStorage.getItem('user_id');
 
   if (user) {
-    fetch('http://127.0.0.1:8000/comment/create/', {
+    fetch(`${API}/comment/create/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -670,7 +663,7 @@ function addComment(event) {
       .then((response) => response.json())
       .then((data) => {
         alert('Comment Added');
-        fetchRecipeDetails(recipeId); // Refresh comments
+        fetchRecipeDetails(recipeId);
       })
       .catch((error) => {
         console.error('Error adding comment:', error);
@@ -690,7 +683,7 @@ const closeCommentModal = () => {
 };
 
 const editComment = (id) => {
-  fetch(`http://127.0.0.1:8000/comment/list/${id}`, {
+  fetch(`${API}/comment/list/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -716,7 +709,7 @@ const submitCommentEdit = (event) => {
   const rating = document.getElementById('edit-comment-rating').value;
   const user = localStorage.getItem('user_id');
   console.log(recipe_id);
-  fetch(`http://127.0.0.1:8000/comment/update/${id}/`, {
+  fetch(`${API}/comment/update/${id}/`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -749,7 +742,7 @@ const deleteComment = (id) => {
     return;
   }
 
-  fetch(`http://127.0.0.1:8000/comment/delete/${id}/`, {
+  fetch(`${API}/comment/delete/${id}/`, {
     method: 'DELETE',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -776,7 +769,7 @@ const handleContactInfo = (event) => {
     message: user_msg,
   };
   console.log(info);
-  fetch('http://127.0.0.1:8000/contact/create/', {
+  fetch(`${API}/contact/create/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
