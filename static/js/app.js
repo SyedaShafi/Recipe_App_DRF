@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   fetchAllRecipes();
+});
+
+ document.addEventListener('DOMContentLoaded', function () {
+   swiffyslider.init();
+ });
+
+document.addEventListener('DOMContentLoaded', () => {
   allComments();
 });
 
@@ -435,7 +442,8 @@ function displayRecipes(recipes) {
     const truncatedInstructions = truncateText(recipe.instructions, 10);
     const truncatedIngredients = truncateText(recipe.ingredients, 10);
     const card = `
-      <div class="card m-2" style="width: 464px">
+    <div class="col-md-6>
+       <div class="card m-2 border border-black">
         <img src="${recipe.image}" class="card-img-top" alt="${recipe.title}" style="object-fit: cover; height: 300px; width:100%;">
         <div class="card-body" >
           <h5 class="card-title">${recipe.title}</h5>
@@ -444,6 +452,8 @@ function displayRecipes(recipes) {
           <a href="/recipe_details?id=${recipe.id}" class="btn btn-primary">Details</a>
         </div>
       </div>
+    </div>
+     
     `;
     container.innerHTML += card;
   });
