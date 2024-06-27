@@ -1,20 +1,17 @@
 {% extends "base.html" %} {% load static %} {% block body %}
-<div
-  id="recipe-detail-container"
-  class="container w-100 mx-auto pt-5 row"
-></div>
+<div id="recipe-detail-container" class="mx-md-5"></div>
 
 <!-- Edit Comment Modal -->
 <div id="editCommentModal" class="modal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-       <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          onclick="closeCommentModal()"
-        ></button>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        onclick="closeCommentModal()"
+      ></button>
       <form
         id="editCommentForm"
         class="pb-4"
@@ -42,16 +39,16 @@
             <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
           </select>
         </div>
-         <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            onclick="closeCommentModal()"
-          >
-            Close
-          </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          onclick="closeCommentModal()"
+        >
+          Close
+        </button>
 
-       <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
       </form>
     </div>
   </div>
