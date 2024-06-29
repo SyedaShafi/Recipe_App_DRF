@@ -1,4 +1,4 @@
-const API = 'https://recipe-app-drf.onrender.com/';
+const API = 'https://recipe-app-drf.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchAllRecipes();
@@ -177,7 +177,7 @@ const handlelogOut = () => {
       if (response.ok) {
         alert('User Logged Out');
         localStorage.clear();
-        window.location.href = '/login/';
+        window.location.href = '/';
       } else {
         console.error('Logout failed');
       }
@@ -231,8 +231,21 @@ function fetchProfileData() {
       // console.log(data);
       const parent = document.getElementById('user-recipe-cards');
       parent.innerHTML = '';
-      data.forEach((d) => {
+      if (data.length == 0) {
         const child = `
+            <div class="text-center py-4">
+              <img src="/static/images/post.png" alt="" style="width:100px; height:100px; ">
+            </div>
+            <div class="text-center mb-5">
+              <strong>You have not posted yet! <a href='/add_recipe/'>Post now</a></strong>
+            </div>
+
+        
+        `;
+        parent.innerHTML += child;
+      } else {
+        data.forEach((d) => {
+          const child = `
         <div class="col-md-6">
          <div class="card mx-2 h-100"    data-recipe-id="${d.id}">
               <img src="${d.image}" class="w-100 card-img-top" alt="..." style="height:400px;" />
@@ -257,8 +270,9 @@ function fetchProfileData() {
         </div>
          
         `;
-        parent.innerHTML += child;
-      });
+          parent.innerHTML += child;
+        });
+      }
     })
     .catch((error) => {
       console.error('Error fetching recipes:', error);
