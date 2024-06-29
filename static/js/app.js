@@ -1,4 +1,4 @@
-const API = 'https://recipe-app-drf.onrender.com';
+const API = 'http://127.0.0.1:8000/';
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchAllRecipes();
@@ -454,18 +454,23 @@ function truncateText(text, wordLimit) {
 function displayRecipes(recipes) {
   const container = document.getElementById('all-recipe-cards-container');
   container.innerHTML = '';
-  recipes.forEach((recipe) => {
+  recipes.forEach(async (recipe) => {
     const truncatedInstructions = truncateText(recipe.instructions, 10);
     const truncatedIngredients = truncateText(recipe.ingredients, 10);
+    const userDetails = await fetchUserDetails(recipe.user);
     const card = `
     <div class="col-md-6 " >
        <div class="card m-2 border border-black h-100">
         <img src="${recipe.image}" class="card-img-top" alt="${recipe.title}" style="object-fit: cover; height: 300px; width:100%;">
-
+          <div class="py-2 text-center bg-custom ">
+            
+               <strong> Posted By: ${userDetails.first_name} ${userDetails.last_name}</strong>
+            </div>
         <div class="card-body" >
-            <h5 class="card-title">${recipe.title}</h5>
+            <h5 class="card-title">${recipe.title} </h5>
             <p class="card-text"> <strong> Ingredients:</strong>  ${truncatedIngredients}</p>
             <p class="card-text"><strong> Instructions: </strong>  ${truncatedInstructions}</p>
+          
             <a href="/recipe_details?id=${recipe.id}" class="btn btn-primary">Details</a>
         </div>
       </div>
@@ -487,17 +492,20 @@ function fetchRecipeDetails(id) {
     });
 }
 
-function displayRecipeDetails(recipe) {
+async function displayRecipeDetails(recipe) {
   const container = document.getElementById('recipe-detail-container');
+  const userDetails = await fetchUserDetails(recipe.user);
   container.innerHTML = `
 
   <div class="row justify-content-center align-items-center mt-5">
       <div class="col-md-6 mt-5">
+       
         <h1>${recipe.title}</h1>
         <h3>Ingredients</h3>
         <p>${recipe.ingredients}</p>
         <h3>Instructions</h3>
         <p>${recipe.instructions}</p>
+        <strong>Author: ${userDetails.first_name} ${userDetails.last_name}</strong>
       </div>
 
       <div class="col-md-6">

@@ -57,6 +57,10 @@ body{
     z-index: 10;
 }
 
+.bg-custom{
+    background-color: rgb(250, 231, 205);
+}
+
 .nav-text-color{
     color: rgb(252, 233, 209) !important;
 }
