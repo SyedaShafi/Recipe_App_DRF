@@ -46,6 +46,6 @@ python manage.py runserver
 7. Open your browser and navigate to http://127.0.0.1:8000 to see the application.
 
 ## Contact
-Your Name -syedashafi4@gmail.com
+Email - syedashafi4@gmail.com
 
 Project Link: https://recipe-app-drf.onrender.com/
